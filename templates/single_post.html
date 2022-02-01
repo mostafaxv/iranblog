@@ -61,8 +61,17 @@
 <!--
 TODO: Add a component for showing the comments for this post (Also you need to add a variable called "comments" to
  Jinja context)
+ {{ comment_form }}
 -->
+    {% for post_comment in post_comments %}
 
+       <h5> from : {{ post_comment.name }} </h5>
+        <h6>{{ post_comment.email }}</h6>
+       <p> {{ post_comment.text }}</p>
+
+       <h6>in {{post_comment.created_at }}</h6>
+
+    {% endfor %}
 <h1>Add your comment</h1>
 <form action="" method="post">
     {% csrf_token %}

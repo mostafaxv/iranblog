@@ -39,12 +39,16 @@ class CommentForm(forms.Form):
 
 
 def get_single_post(req, post_id):
+    post = Post.objects.get(id=post_id)
     if req.method == 'GET':
-        post = Post.objects.get(id=post_id)
+        post_comments = Comment.objects.filter(post_id=post_id)
+
         return HttpResponse(render(req, 'single_post.html', context={
             'post': post,
-            'comment_form': CommentForm()
+            'comment_form': CommentForm(),
+            'post_comments': post_comments,
         }))
+
     elif req.method == 'POST':
         # add comment
         form = CommentForm(data=req.POST)
@@ -53,8 +57,10 @@ def get_single_post(req, post_id):
             # TODO: fill the object creation logic(name, email, post, text)
 
             Comment.objects.create(
-                name=form.cleaned_data['name'],
-
+                name = form.cleaned_data['name'],
+                email = form.cleaned_data['email'],
+                text = form.cleaned_data['text'],
+                post = post,
             )
             return HttpResponse("comment submitted")
         else:
